@@ -9,12 +9,14 @@
         #help-link {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+    left: 50%; /* 改为水平中线定位 */
+    transform: translateX(-50%); /* 向左回退自身50%宽度实现居中 */
             color: #666;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s;
         }
+
 
         #help-link:hover {
             color: #4CAF50;
@@ -312,4 +314,33 @@ blockquote {
         startBtn.addEventListener('click', startTimer);
     </script>
 </body>
+
+<a href="https://github.com/Sueyangit/mini-writing-timer/issues/new?template=feedback.yml" 
+   id="feedback-link"
+   target="_blank"
+   rel="noopener noreferrer">
+    💬 提交反馈
+</a>
+
+<style>
+#feedback-link {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    padding: 12px 20px;
+    background: #2F80ED;
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+#feedback-link:hover {
+    background: #1B65C0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+</style>
 </html>
