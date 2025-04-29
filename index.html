@@ -4,12 +4,89 @@
     <meta charset="UTF-8">
     <title>十分钟专注写作</title>
     <style>
+	
+	 /* 新增帮助相关样式 */
+        #help-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        #help-link:hover {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
+        #help-overlay {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            z-index: 2000;
+        }
+
+        .help-section {
+            margin-bottom: 20px;
+        }
+
+        .help-section h3 {
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+
+        .help-section ul {
+            padding-left: 20px;
+        }
+
+        .overlay-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+        }
+		
+		/* 新增引用样式 */
+blockquote {
+    border-left: 4px solid #4CAF50;
+    margin: 15px 0;
+    padding: 10px 20px;
+    background: #f8f8f8;
+    color: #666;
+    font-style: italic;
+}
+
+/* 二级列表缩进 */
+.help-section ul ul {
+    padding-left: 25px;
+    list-style-type: circle;
+}
+
+/* 小字注释 */
+.help-section small {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+		
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
             padding: 20px;
+            position: relative; /* 添加相对定位 */
         }
 
         #timer {
@@ -49,6 +126,18 @@
             margin-top: 20px;
             color: #666;
         }
+
+        #word-count {
+            position: fixed; /* 改为固定定位 */
+            bottom: 20px;
+            right: 20px;
+            color: #666;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -56,15 +145,124 @@
     <textarea id="text-box" placeholder="在这里输入你的文字..." disabled></textarea>
     <button id="start-btn">开始写作</button>
     <div id="status"></div>
+    <div id="word-count">字数：0</div> <!-- 移动到body末尾 -->
+ <!-- 新增帮助链接 -->
+    <a href="#" id="help-link">使用帮助</a>
+
+    <!-- 帮助内容弹窗 -->
+    <div id="help-overlay">
+        <div class="overlay-close" onclick="toggleHelp()">×</div>
+        <div class="help-section">
+            <h2>📝 十分钟专注写作指南</h2>
+            <p>欢迎使用本写作工具，请遵循以下步骤获得最佳体验：</p>
+        </div>
+
+        <div class="help-section">
+            <h3>▶️ 开始使用</h3>
+            <ul>
+                <li>点击绿色「开始写作」按钮启动倒计时</li>
+                <li>文本框会自动激活并进入可编辑状态</li>
+                <li>倒计时期间请专注写作不要中断</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h3>⏳ 倒计时功能</h3>
+            <ul>
+                <li>默认倒计时10分钟（可修改代码调整时长）</li>
+                <li>结束时有声音提示（需浏览器允许）</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h3>📊 字数统计</h3>
+            <ul>
+                <li>右下角实时显示字数统计，中文按字符计数，英文按单词计数</li>
+                <li>倒计时结束自动显示最终字数</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h3>📋 内容处理</h3>
+            <ul>
+                <li>倒计时结束自动复制内容到剪贴板（需浏览器允许）</li>
+                <li>文本框内容会自动清空</li>
+                <li>意外关闭页面会导致内容丢失，请及时保存</li>
+            </ul>
+        </div>
+		    <div class="help-section">
+        <h2>📖 鸣谢</h2>
+        <p>本工具灵感源自犯罪小说大师<em>劳伦斯·布洛克</em>在《为你的生活写作》中提出的写作法：</p>
+        <blockquote>
+            "每天给自己10分钟，像职业作家那样坐下来写。不删改、不停顿、不找借口——让文字自由流淌"
+        </blockquote>
+    </div>
+
+    <div class="help-section">
+        <h3>🧠 科学写作法</h3>
+        <ul>
+            <li>⏱️ <strong>时间盒效应</strong>：短时间专注比长时间低效更有产出</li>
+            <li>🚫 <strong>禁编辑模式</strong>：关闭内在批判者，激发原始创造力</li>
+            <li>📈 <strong>累积效应</strong>：每天10分钟，每月可得5小时纯创作时间</li>
+        </ul>
+    </div>
+
+    <div class="help-section">
+        <p style="color:#999;font-size:0.9em;margin-top:5px;">
+            ※ 布洛克式忠告：“自动写作”这个特别的术语也被用于一种所谓的“通灵修炼”，即利用占卜板，通过自己的书写传达灵魂的声音
+        </p>
+    </div>
+    </div>
 
     <script>
+	
+	 // 新增帮助弹窗控制逻辑
+        const helpOverlay = document.getElementById('help-overlay');
+        const helpLink = document.getElementById('help-link');
+
+        function toggleHelp() {
+            helpOverlay.style.display = helpOverlay.style.display === 'block' ? 'none' : 'block';
+        }
+
+        helpLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleHelp();
+        });
+
+        // 点击弹窗外区域关闭
+        window.addEventListener('click', function(e) {
+            if (e.target === helpOverlay) {
+                toggleHelp();
+            }
+        });
+
+        // 原有其他代码保持不变
+        // ...（之前的JavaScript代码）
+		
         const timerDisplay = document.getElementById('timer');
         const textBox = document.getElementById('text-box');
         const startBtn = document.getElementById('start-btn');
         const statusDiv = document.getElementById('status');
+        const wordCountDiv = document.getElementById('word-count');
 
         let timeLeft = 600; // 10分钟（单位：秒）
         let timerId = null;
+
+        // 实时字数统计
+        textBox.addEventListener('input', updateWordCount);
+        
+        function updateWordCount() {
+            const content = textBox.value;
+            // 统计规则：中文按字计数，英文按单词计数
+            const chineseCharCount = content.match(/[\u4e00-\u9fa5]/g)?.length || 0;
+            const englishWordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+            const total = chineseCharCount + englishWordCount;
+            
+            wordCountDiv.textContent = `字数统计：
+中文：${chineseCharCount} 字
+英文：${englishWordCount} 词
+总计：${total}`;
+        }
 
         function updateTimerDisplay(seconds) {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -72,11 +270,11 @@
             timerDisplay.textContent = `${mins}:${secs}`;
         }
 
-        async function copyToClipboard(text) {
+        async function copyToClipboard(text, count) {
             try {
                 await navigator.clipboard.writeText(text);
-                statusDiv.textContent = '内容已自动复制到剪贴板！';
-                setTimeout(() => statusDiv.textContent = '', 3000);
+                statusDiv.innerHTML = `内容已自动复制到剪贴板！<br>共创作了 <strong>${count}</strong> 字`;
+                setTimeout(() => statusDiv.textContent = '', 5000);
             } catch (err) {
                 console.error('复制失败:', err);
                 statusDiv.textContent = '自动复制失败，请手动复制内容';
@@ -87,6 +285,7 @@
             startBtn.disabled = true;
             textBox.disabled = false;
             textBox.focus();
+            updateWordCount(); // 初始化字数显示
             
             timerId = setInterval(() => {
                 timeLeft--;
@@ -95,13 +294,16 @@
                 if (timeLeft <= 0) {
                     clearInterval(timerId);
                     const content = textBox.value;
+                    const finalCount = wordCountDiv.textContent.match(/总计：(\d+)/)[1];
                     textBox.value = '';
                     textBox.disabled = true;
                     startBtn.disabled = false;
                     timeLeft = 600;
                     updateTimerDisplay(timeLeft);
+                    wordCountDiv.textContent = '字数：0';
+                    
                     if (content) {
-                        copyToClipboard(content);
+                        copyToClipboard(content, finalCount);
                     }
                 }
             }, 1000);
