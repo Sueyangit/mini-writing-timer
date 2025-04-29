@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>十分钟专注写作</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #timer {
+            font-size: 40px;
+            margin: 20px;
+            color: #333;
+        }
+
+        #text-box {
+            width: 80%;
+            height: 300px;
+            margin: 20px;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        #start-btn {
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #status {
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">10:00</div>
+    <textarea id="text-box" placeholder="在这里输入你的文字..." disabled></textarea>
+    <button id="start-btn">开始写作</button>
+    <div id="status"></div>
+
+    <script>
+        const timerDisplay = document.getElementById('timer');
+        const textBox = document.getElementById('text-box');
+        const startBtn = document.getElementById('start-btn');
+        const statusDiv = document.getElementById('status');
+
+        let timeLeft = 600; // 10分钟（单位：秒）
+        let timerId = null;
+
+        function updateTimerDisplay(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            timerDisplay.textContent = `${mins}:${secs}`;
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                statusDiv.textContent = '内容已自动复制到剪贴板！';
+                setTimeout(() => statusDiv.textContent = '', 3000);
+            } catch (err) {
+                console.error('复制失败:', err);
+                statusDiv.textContent = '自动复制失败，请手动复制内容';
+            }
+        }
+
+        function startTimer() {
+            startBtn.disabled = true;
+            textBox.disabled = false;
+            textBox.focus();
+            
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay(timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    const content = textBox.value;
+                    textBox.value = '';
+                    textBox.disabled = true;
+                    startBtn.disabled = false;
+                    timeLeft = 600;
+                    updateTimerDisplay(timeLeft);
+                    if (content) {
+                        copyToClipboard(content);
+                    }
+                }
+            }, 1000);
+        }
+
+        startBtn.addEventListener('click', startTimer);
+    </script>
+</body>
+</html>
